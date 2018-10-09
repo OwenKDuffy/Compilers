@@ -12,7 +12,7 @@ SERIALNO      [0-9]{1,6}
 %%
 
 
-{YEAR}"-"({NEWCOUNTY}|{COUNTIES})"-"{SERIALNO}  {printf("NewPlate");
+{YEAR}"-"{NEWCOUNTY}"-"{SERIALNO}  {
                                       char* arr;
                                       arr[0] = yytext[0];
                                       arr[1] = yytext[1];
@@ -29,11 +29,36 @@ SERIALNO      [0-9]{1,6}
                                       return 0;
                                       }
 
-{YEAR}"-"({OLDCOUNTY}|{COUNTIES})"-"{SERIALNO}  {char* arr;
+{YEAR}"-"({OLDCOUNTY})"-"{SERIALNO}  {char* arr;
                                       arr[0] = yytext[0];
                                       arr[1] = yytext[1];
                                       int year = atoi(arr);
                                       if(year == 13 && (yytext[2] <= 2 && yytext > 0))
+                                      {
+                                        int yearsSince = 18 - year;
+                                        printf("%d\n", yearsSince);
+                                      }
+                                      else if(year >= 87)
+                                      {
+                                        int yearsSince = 2018 - (1900 + year);
+                                        printf("%d\n", yearsSince);
+                                      }
+                                      else if (year < 13)
+                                      {
+                                        int yearsSince = 18 - year;
+                                        printf("%d\n", yearsSince);
+                                      }
+                                      else
+                                      {
+                                        printf("INVALID\n");
+                                      }
+                                      return 0;
+}
+{YEAR}"-"({COUNTIES})"-"{SERIALNO}  {char* arr;
+                                      arr[0] = yytext[0];
+                                      arr[1] = yytext[1];
+                                      int year = atoi(arr);
+                                      if(year >= 13 && (yytext[2] <= 2 && yytext > 0))
                                       {
                                         int yearsSince = 18 - year;
                                         printf("%d\n", yearsSince);
@@ -62,6 +87,9 @@ SERIALNO      [0-9]{1,6}
 
 int main()
 {
+	fflush(stdin);
+  //printf("In Main");
   yylex();
+  //printf("out Main");
   return 0;
 }
