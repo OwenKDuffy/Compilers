@@ -17,7 +17,7 @@ SERIALNO      [0-9]{1,6}
                                       arr[0] = yytext[0];
                                       arr[1] = yytext[1];
                                       int year = atoi(arr);
-                                      if(year >= 14 && (yytext[2] <= 2 && yytext > 0))
+                                      if(year >= 14 && (atoi(&yytext[2]) <= 2 && yytext > 0))
                                       {
                                         int yearsSince = 18 - year;
                                         printf("%d\n", yearsSince);
@@ -33,7 +33,7 @@ SERIALNO      [0-9]{1,6}
                                       arr[0] = yytext[0];
                                       arr[1] = yytext[1];
                                       int year = atoi(arr);
-                                      if(year == 13 && (yytext[2] <= 2 && yytext > 0))
+                                      if(year == 13 && (atoi(&yytext[2]) <= 2 && yytext > 0))
                                       {
                                         int yearsSince = 18 - year;
                                         printf("%d\n", yearsSince);
@@ -58,7 +58,7 @@ SERIALNO      [0-9]{1,6}
                                       arr[0] = yytext[0];
                                       arr[1] = yytext[1];
                                       int year = atoi(arr);
-                                      if(year >= 13 && (yytext[2] <= 2 && yytext > 0))
+                                      if(year >= 13 && (atoi(&yytext[2]) <= 2 && yytext > 0))
                                       {
                                         int yearsSince = 18 - year;
                                         printf("%d\n", yearsSince);
