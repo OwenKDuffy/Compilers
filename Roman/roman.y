@@ -1,45 +1,34 @@
 %{
+    #include "roman.tab.h"
     #include <stdio.h>
     #include <stdlib.h>
     int yylex();
     void yyerror(char* s);
-}%
+%}
 
-
-%union {
-  struct ast *a;
-  double d;
-}
 
 %token EOL
-%token <char> NUMBER
+%token NUMBER
+%%
 
-decimal:
+line: /*do nothing */
+| line exp EOL { printf("%d\n", $2); }
+;
 
+exp: NUMBER
+| exp NUMBER {$$ = $1 + $2;}
+;
 
-term : NUMBER { switch($1)
-                {
-                    case 'I':
-                        $$ = 1;
-                        break;
-                    case 'V':
-                        $$ = 5;
-                        break;
-                    case 'V':
-                        $$ = 5;
-                        break;
-                    case 'V':
-                        $$ = 5;
-                        break;
-                    case 'V':
-                        $$ = 5;
-                        break;
-                    case 'V':
-                        $$ = 5;
-                        break;
-                    case 'V':
-                        $$ = 5;
-                        break;
-                }
-            }
-            ;
+%%
+
+int main()
+{
+    fflush(stdin);
+    yyparse();
+    return 0;
+}
+
+void yyerror(char *s)
+{
+  fprintf(stderr, "error: %s\n", s);
+}
