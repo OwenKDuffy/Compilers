@@ -10,11 +10,11 @@
 
 %token EOL
 %token Z I V X L C D M
-%token ADD SUB MUL DIV ABS
+%token ADD SUB MUL DIV
 
 %%
 calclist: /* nothing */
- | calclist exp EOL { printRoman($2); }
+ | calclist exp EOL { /*printf("PrintRoman of : %d\n", $2);*/ ($2 == 0) ? printf("Z\n") : printRoman($2); }
  ;
 
 exp: factor
@@ -24,15 +24,14 @@ exp: factor
 
 factor: term
  | factor MUL term { $$ = $1 * $3; }
- | factor DIV term { $$ = $1 / $3; }
+ | factor DIV term { $$ = $1 / $3; /*printf("%d div %d = %d\n", $1, $3, $$);*/}
  ;
 
 term: number
- | ABS term { $$ = $2 >= 0? $2 : - $2; }
- | '(' exp ')' { $$ = $2; }
+ | '{' exp '}' { $$ = $2; }
  ;
 
-number: thousands lessThanThousand {$$ = $1 + $2; printf("%d\n", $$);}
+number: thousands lessThanThousand {$$ = $1 + $2; }
 | lessThanThousand {$$ = $1;}
 | Z {$$ = $1;}
 ;
@@ -114,95 +113,103 @@ units: I {$$ = $1;}
 
 int main()
 {
-    fflush(stdin);
+    /*fflush(stdin);*/
     yyparse();
     return 0;
 }
 void printRoman(int i)
 {
+    if(i < 0)
+    {
+        printf("-");
+        printRoman(i * -1);
+        return;
+    }
     if(i >= 1000)
     {
-        printf("%s\n", "M");
+        printf("%s", "M");
         printRoman(i - 1000);
         return;
     }
     else if(i >= 900)
     {
-        printf("%s\n", "CM");
+        printf("%s", "CM");
         printRoman(i - 900);
         return;
     }
     else if(i >= 500)
     {
-        printf("%s\n", "D");
+        printf("%s", "D");
         printRoman(i - 500);
         return;
     }
     else if(i >= 400)
     {
-        printf("%s\n", "CD");
+        printf("%s", "CD");
         printRoman(i - 400);
         return;
     }
     else if(i >= 100)
     {
-        printf("%s\n", "C");
+        printf("%s", "C");
         printRoman(i - 100);
         return;
     }
     else if(i >= 90)
     {
-        printf("%s\n", "XC");
+        printf("%s", "XC");
         printRoman(i - 90);
         return;
     }
     else if(i >= 50)
     {
-        printf("%s\n", "L");
+        printf("%s", "L");
         printRoman(i - 50);
         return;
     }
     else if(i >= 40)
     {
-        printf("%s\n", "XL");
+        printf("%s", "XL");
         printRoman(i - 40);
         return;
     }
     else if(i >= 10)
     {
-        printf("%s\n", "X");
+        printf("%s", "X");
         printRoman(i - 10);
         return;
     }
     else if(i >= 9)
     {
-        printf("%s\n", "IX");
+        printf("%s", "IX");
         printRoman(i - 9);
         return;
     }
     else if(i >= 5)
     {
-        printf("%s\n", "V");
+        printf("%s", "V");
         printRoman(i - 5);
         return;
     }
     else if(i >= 4)
     {
-        printf("%s\n", "IV");
+        printf("%s", "IV");
         printRoman(i - 4);
         return;
     }
     else if(i >= 1)
     {
-        printf("%s\n", "I");
+        printf("%s", "I");
         printRoman(i - 1);
         return;
     }
     else if(i == 0)
     {
+        printf("\n");
         return;
     }
 }
+
 void yyerror(char *s)
 {
   fprintf(stderr, "%s\n", s);

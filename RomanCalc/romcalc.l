@@ -4,11 +4,10 @@
 %}
 
 %%
-"+" |
-"-" |
-"*" |
-"/" |
-"|" |
+"+"     {return ADD;}
+"-"     {return SUB;}
+"*"     {return MUL;}
+"/"     {return DIV;}
 "{" |
 "}"     { return yytext[0]; }
 "Z"     {yylval = 0; return Z;}
@@ -21,6 +20,6 @@
 "M"     {yylval = 1000; return M;}
 
 \n      {return EOL;}
-[ \t]   { /*ignore whitespace */ }
+[ \t]*   { /*ignore whitespace */ }
 .       {printf("syntax error\n"); exit(0);}
 %%
