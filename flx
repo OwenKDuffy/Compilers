@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#DIR = pwd
+
+#find $DIR -type f -name "*.l" -exec flex {} \;
+flex `find $DIR -type f -name "*.l"`
+gcc lex.yy.c -lfl
+echo "Running now";
+./a.out

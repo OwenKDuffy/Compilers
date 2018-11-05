@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#DIR = pwd
+
+#find $DIR -type f -name "*.l" -exec flex {} \;
+bison -d `find $DIR -type f -name "*.y"`
+flex `find $DIR -type f -name "*.l"`
+gcc `find $DIR -type f -name "*.tab.c"` lex.yy.c -lfl
+echo "Running now";
+
+if [ $# -eq 1 ]; then
+    #echo "input = $1";
+    ./a.out < $1
+fi 
+./a.out
