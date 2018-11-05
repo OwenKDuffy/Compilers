@@ -1,9 +1,17 @@
 %{
-    #include "roman.tab.h"
+    #include "romcalc.tab.h"
     #include <stdio.h>
 %}
 
 %%
+"+" |
+"-" |
+"*" |
+"/" |
+"|" |
+"{" |
+"}"     { return yytext[0]; }
+"Z"     {yylval = 0; return Z;}
 "I"     {yylval = 1; return I;}
 "V"     {yylval = 5; return V;}
 "X"     {yylval = 10; return X;}
