@@ -9,13 +9,15 @@
 
 
 %token EOL
-%token NUMBER ASSIGNMENT VAR
+%token NUMBER ASSIGNMENT VAR PRINT
 %token ADD SUB MUL DIV
 
 %%
-/* calclist: /* nothing */
- //| calclist exp EOL { /*printf("PrintRoman of : %d\n", $2);*/ ($2 == 0) ? printf("Z\n") : printRoman($2); }
- //; */
+ calclist: /* nothing */
+ | calclist exp EOL {}
+ | calclist initialization EOL {}
+ | calclist println {}
+ ;
 
 exp: factor
  | exp ADD factor { $$ = $1 + $3; }

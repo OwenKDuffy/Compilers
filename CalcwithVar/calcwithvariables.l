@@ -11,7 +11,7 @@
 ":="    {return ASSIGNMENT;}
 [0-9]+	{ yylval = atoi(yytext); return NUMBER; }
 [a-z]   {yylval = yytext[0]; return VAR;}
-"print" {reTurn PRINT;}
+"print" {return PRINT;}
 "{" |
 "}"     { return yytext[0]; }
 \n      {return EOL;}
