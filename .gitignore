@@ -1,6 +1,8 @@
-*.zip
-*.c
-*.h
-*.out
-*.txt
-*/
+*
+
+!*.md
+!.gitignore
+!*.l
+!*.y
+
+!*/
