@@ -4,48 +4,51 @@
     #include <stdlib.h>
     int yylex();
     void yyerror(char* s);
+    int yyparse();
     int vars[26];
 %}
 
 
-%token EOL
+
 %token NUMBER ASSIGNMENT VAR PRINT ENDSTATEMENT
 %token ADD SUB MUL DIV
 
 %%
  calclist: /* nothing */
- | calclist exp EOL {}
- | calclist initialization EOL {}
- | calclist println EOL {}
+ | calclist statement {}
  ;
 
-exp: factor
- | exp ADD factor { $$ = $1 + $3; }
- | exp SUB factor { $$ = $1 - $3; }
+ statement:
+ |  VAR ASSIGNMENT exp ENDSTATEMENT {vars[$1 - 'a'] = $3;}
+ |  PRINT VAR ENDSTATEMENT  {printf("%d\n", vars[$2 - 'a']);}
+;
+exp: factor          {$$ = $1;}
+ | exp ADD factor   { $$ = $1 + $3; }
+ | exp SUB factor   { $$ = $1 - $3; }
  ;
 
-factor: term
- | factor MUL term { $$ = $1 * $3; }
- | factor DIV term { $$ = $1 / $3; }
+factor: term        {$$ = $1;}
+ | factor MUL term  { $$ = $1 * $3; }
+ | factor DIV term  { $$ = $1 / $3; }
  ;
 
-term: NUMBER
- | '{' exp '}' { $$ = $2; }
- | VAR {$$ = vars[yylval - 'a']; printf("Var %c", $1);}
+term: NUMBER        {$$ = $1;}
+ | VAR              {$$ = vars[$1 - 'a']; }
+ | SUB NUMBER       {$$ = $2 * -1;}
  ;
 
- initialization:
- | VAR ASSIGNMENT NUMBER ENDSTATEMENT {vars[$1 - 'a'] = $3; printf("Initialised %c as %d", $1, $3);}
- | VAR ASSIGNMENT exp ENDSTATEMENT {vars[$1 - 'a'] = $3; printf("Initialised %c", $1);}
- ;
 
- println: /*nothing */
- | println VAR ENDSTATEMENT {int val = vars[$2 - 'a']; printf("%d\n", val);}
- ;
 %%
 
 
 void yyerror(char *s)
 {
   fprintf(stderr, "%s\n", s);
+  exit(0);
+}
+
+int main()
+{
+    yyparse();
+    return(0);
 }
