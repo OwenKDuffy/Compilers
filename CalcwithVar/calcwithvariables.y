@@ -4,18 +4,18 @@
     #include <stdlib.h>
     int yylex();
     void yyerror(char* s);
-
+    int vars[26];
 %}
 
 
 %token EOL
-
+%token NUMBER ASSIGNMENT VAR
 %token ADD SUB MUL DIV
 
 %%
-calclist: /* nothing */
- | calclist exp EOL { /*printf("PrintRoman of : %d\n", $2);*/ ($2 == 0) ? printf("Z\n") : printRoman($2); }
- ;
+/* calclist: /* nothing */
+ //| calclist exp EOL { /*printf("PrintRoman of : %d\n", $2);*/ ($2 == 0) ? printf("Z\n") : printRoman($2); }
+ //; */
 
 exp: factor
  | exp ADD factor { $$ = $1 + $3; }
@@ -24,10 +24,19 @@ exp: factor
 
 factor: term
  | factor MUL term { $$ = $1 * $3; }
- | factor DIV term { $$ = $1 / $3; /*printf("%d div %d = %d\n", $1, $3, $$);*/}
+ | factor DIV term { $$ = $1 / $3; }
  ;
 
-term: number
+term: NUMBER
  | '{' exp '}' { $$ = $2; }
+ | VAR {$$ = vars[yylval - 'a'];}
+ ;
+
+ initialization:
+ VAR ASSIGNMENT exp {vars[$1 - 'a'] = $3;}
+ ;
+
+ println: /*nothing */
+ | println VAR EOL {int val = vars[$2 - 'a']; printf("%d\n", val);}
  ;
 %%
